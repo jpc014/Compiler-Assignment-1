@@ -51,16 +51,18 @@ public class parser {
 
 	/*
 	 * Grammar 
-	 * <program> ->BEGIN <stmt_list> END <stmt> -> <id> := <expr> | ε
-	 * <stmt_list> -> <stmt_list> ; <stmt> | <stmt> <expr> -> <expr> + <term> |
-	 * <expr> - <term> | <term> <term> -> <term> * <factor> | <term> DIV
-	 * <factor> | <term> MOD <factor> | <factor> <factor> -> <primary> ^
-	 * <factor> | <primary> <primary> -> <id> | <num> | ( <expr> )
+	 * <program> -> BEGIN <stmt_list> END 
+	 * <stmt_list> -> <stmt_list> ; <stmt> | <stmt> 
+	 * <stmt> -> <id> := <expr> | epsilon
+	 * <expr> -> <expr> + <term> |<expr> - <term> | <term>
+	 * <term> -> <term> * <factor> | <term> DIV <factor> | <term> MOD <factor> | <factor> 
+	 * <factor> -> <primary> ^<factor> | <primary> 
+	 * <primary> -> <id> | <num> | ( <expr> )
 	 */
 
 	
 	public static void Match(String t){
-		//compares Symbol with token stored in lookAhead, if they match advance look ahead to next token
+		//compares Symbol with token stored in lookAhead, if they match advance lookAhead to next token
 		//else there is an error
 		if(lookAhead == t){
 			//LookAhead == nexttoken();
@@ -69,6 +71,75 @@ public class parser {
 			System.out.println("The token does not match, exiting...");
 			System.exit(0);
 		}
+	}
+	
+	public static void program(){
+		//check BEGIN symbol
+		
+		//check END Symbol
+		
+		//Proceed to parse stmt_List
+		stmt_List();
+	}
+	
+	public static void stmt(){
+		//<id> := <expr>
+		
+		
+		//epsilon
+		
+	}
+	
+	public static void stmt_List(){
+		//if <stmt_list> ; <stmt> ************ need to remove left recursion 
+		
+		//else if <stmt>
+		
+		//else error
+		
+	}
+	
+	public static void expr(){
+		//<expr> + <term>
+		
+		//<expr> - <term>
+		
+		// <term>
+		
+		//error
+		
+	}
+	
+	public static void term(){
+		// <term> * <factor>
+		
+		// <term> DIV <factor>
+		
+		// <term> MOD <factor>
+		
+		// <factor>
+		
+		//error
+		
+	}
+	
+	public static void factor(){
+		//<primary> ^ <factor>
+		
+		// <primary>
+		
+		//error
+	}
+	
+	public static void primary(){
+		// <id>
+		
+		// <num>
+		
+		// (<expr>)
+		
+		//error
+		
 	}
 	
 	
