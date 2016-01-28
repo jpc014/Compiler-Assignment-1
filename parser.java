@@ -22,7 +22,7 @@ public void type(){
 }
 */
 
-public class compiler {
+public class parser {
 	// Symbols
 	public static final String BEGINSym = "BEGIN";
 	public static final String ENDSym = "END";
@@ -37,12 +37,16 @@ public class compiler {
 	public static final String POWERSym = "^";
 	// public final String = ;
 	
-	//stack
+	//Holds next token
+	public static String lookAhead= "";
+	
+	//initialize stack
 	public static Stack<Integer> stack = new Stack<Integer>();
 
 	public static void main(String args[]) {
 		System.out.println("Hello from main");
-
+		//lexical analyzer
+		//compiler_assignment arrList = new compiler_assignment();
 	}
 
 	/*
@@ -54,7 +58,24 @@ public class compiler {
 	 * <factor> | <primary> <primary> -> <id> | <num> | ( <expr> )
 	 */
 
+	
+	public static void Match(String t){
+		//compares Symbol with token stored in lookAhead, if they match advance look ahead to next token
+		//else there is an error
+		if(lookAhead == t){
+			//LookAhead == nexttoken();
+		}	
+		else{
+			System.out.println("The token does not match, exiting...");
+			System.exit(0);
+		}
+	}
+	
+	
+	
+
 	// Instructions
+
 	public static void PUSH(int s) {
 		// push v (an integer constant) on the stack
 		System.out.println("Hello from PUSH");
