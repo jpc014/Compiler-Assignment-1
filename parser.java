@@ -35,7 +35,11 @@ public class parser {
 	public static final String DIVSym = "DIV";
 	public static final String MODSym = "MOD";
 	public static final String POWERSym = "^";
-	// public final String = ;
+	public static final String POSym = "(";
+	public static final String PCSym = ")";
+	
+	//Holds current token
+	public static String currentToken= "";
 	
 	//Holds next token
 	public static String lookAhead= "";
@@ -74,77 +78,126 @@ public class parser {
 	}
 	
 	public static void program(){
-		//check BEGIN symbol
+		// check BEGIN symbol
 		
-		//check END Symbol
 		
-		//Proceed to parse stmt_List
+		// check END Symbol
+		
+		
+		// Proceed to parse stmt_List
 		stmt_List();
 	}
 	
 	public static void stmt(){
-		//<id> := <expr>
+		// <id> := <expr>
+		if(lookAhead.equals(EQUALSSym)){
+			
+		}
 		
-		
-		//epsilon
+		// epsilon
 		
 	}
 	
 	public static void stmt_List(){
-		//if <stmt_list> ; <stmt> ************ need to remove left recursion 
+		// if <stmt_list> ; <stmt> ************ need to remove left recursion 
 		
-		//else if <stmt>
 		
-		//else error
+		// else if <stmt>
+		
+		
+		// else error
 		
 	}
 	
 	public static void expr(){
-		//<expr> + <term>
+		// <expr> + <term>
+		if(lookAhead.equals(ADDSym)){
+			expr();
+			Match(ADDSym);
+			term();
+		}
 		
-		//<expr> - <term>
+		// <expr> - <term>
+		else if(lookAhead == SUBSym){
+			expr();
+			Match(SUBSym);
+			term();
+		}
 		
 		// <term>
+		else{
+			term();
+		}
 		
-		//error
+		// error
 		
 	}
 	
 	public static void term(){
 		// <term> * <factor>
+		if(lookAhead == MULSym){
+			term();
+			Match(MULSym);
+			factor();
+		}
 		
 		// <term> DIV <factor>
+		else if(lookAhead == DIVSym){
+			term();
+			Match(DIVSym);
+			factor();
+		}
 		
 		// <term> MOD <factor>
+		else if(lookAhead == MODSym){
+			term();
+			Match(MODSym);
+			factor();
+		}
 		
 		// <factor>
+		else{
+			factor();
+		}
 		
-		//error
+		// error
 		
 	}
 	
 	public static void factor(){
-		//<primary> ^ <factor>
+		// <primary> ^ <factor>
+		if(lookAhead == POWERSym){
+			primary();
+			Match(POWERSym);
+			factor();
+		}
 		
 		// <primary>
+		else {
+			primary();
+		}
 		
-		//error
+		// error
 	}
 	
 	public static void primary(){
-		// <id>
+		// reconize current token as an (<expr>)
+		if(currentToken[0].equals(POSym){
+			Match(POSym);
+			expr();
+			Match(PCSym);
+		}
 		
-		// <num>
+		// reconize current token as an <id>
 		
-		// (<expr>)
 		
-		//error
+		// reconize current token as an <num>
+		
+		
+		// error
 		
 	}
 	
-	
-	
-
 	// Instructions
 
 	public static void PUSH(int s) {
