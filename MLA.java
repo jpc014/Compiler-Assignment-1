@@ -1,6 +1,7 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.*;
 
 /*
  * Class MLA
@@ -16,9 +17,12 @@ import java.io.IOException;
  *
  */
 public class MLA {
+	static List <String> list = new ArrayList<String>();
+	static Integer counter = 0;
 	public static void main(String[] args) {
 		String inFile = "input.txt";
 		String outFile = "Sample.out";
+		String tokenToString = null;
 
 		if (args.length > 1) {
 			inFile = args[0];
@@ -33,6 +37,8 @@ public class MLA {
 			Token t;
 
 			while ((t = lexer.nextToken()) != null) {
+				tokenToString = t.getLexeme();
+				list.add(tokenToString);
 				writer.write(t.toString());
 				writer.newLine();
 			}
@@ -44,5 +50,17 @@ public class MLA {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println(currentToken());
+
+	}
+
+	public static String currentToken()
+	{
+		return list.get(counter);
+	}
+
+	public static void nextToken()
+	{
+		counter++;
 	}
 }
