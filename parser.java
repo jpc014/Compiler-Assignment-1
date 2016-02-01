@@ -1,3 +1,11 @@
+/*
+ * TODO
+ * convert list "stack" to string stack
+ * 
+ * if variable gets pushed, push in format "memory index"
+ * memory indicates that it is a variable, and index is the index where that variable is found 
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -45,7 +53,7 @@ public class parser {
 	private static String lookAhead;
 	
 	//initialize stack
-	private static Stack<Integer> stack = new Stack<Integer>();
+	private static Stack<String> stack = new Stack<String>();
 
 	private static List<Variable> memory = new ArrayList<Variable>();
 	
@@ -209,7 +217,7 @@ public class parser {
 		
 		// reconize current token as a <num>
 		else{
-			PUSH(Integer.parseInt(lookAhead));
+			PUSH(lookAhead);
 		}
 		
 		// error
@@ -233,11 +241,11 @@ public class parser {
 	
 	// Instructions
 
-	private static void PUSH(int s) {
+	private static void PUSH(String s) {
 		// push s (an integer constant) on the stack
 		System.out.println("Hello from PUSH");
 		
-		stack.push(s);
+		stack.push(s + "");
 	}
 	
 	private static void POP() {
@@ -249,7 +257,6 @@ public class parser {
 			// TODO Auto-generated catch block
 			System.out.println("POP failed, Stack is empty");
 			HALT();
-
 		}
 	}
 
@@ -263,99 +270,114 @@ public class parser {
 			v = memory.get(i);
 			
 			if(v.getVariable() == var){
-				PUSH();
+				PUSH(v.getValue() + "");
+			}
+		}
+	}
+
+	private static void LVALUE(String l) {//********************************************************************************
+		// push the address of the variable l
+		System.out.println("Hello from LVALUE");		
+		
+		Variable v;
+		for(int i=0; i < memory.size(); i++){
+			v = memory.get(i);
+			
+			if(v.getVariable() == l){
+				PUSH("memory " + i);
 			}
 			
 		}
 	}
 
-	private static void LVALUE() {//********************************************************************************
-		// push the address of the variable l
-		System.out.println("Hello from LVALUE");
-		
-		
-	}
-
-	private static void EQUALS() {
-		// the rvalue on top of the stack is place in the lvalue below it and
-		// both are popped
+	private static void EQUALS() {//***********************************************************************************
+		// the rvalue on top of the stack is placed in the lvalue below it and both are popped
 		System.out.println("Hello from EQUALS");
+		
+		int rvalue = Integer.parseInt(stack.pop());
+		String variable = stack.pop();
+		int index = Integer.parseInt(variable.substring(7));
+		
+		
+		Variable v = memory.get(index);
+		v.setValue(rvalue);
+
 	}
 
 	private static void COPY() {
 		// push a copy of the top value on the stack
-		int s = stack.pop();
+		int s = Integer.parseInt(stack.pop());
 		System.out.println("Copying " + s );
 
-		stack.push(s);
-		stack.push(s);
+		stack.push(s + "");
+		stack.push(s + "");
 	}
 
 	private static void ADD() {
 		// pop the top two values off the stack, add them, and push the result
-		int a = stack.pop();
-		int b = stack.pop();
+		int a = Integer.parseInt(stack.pop());
+		int b = Integer.parseInt(stack.pop());
 		int result = a+b;
 		
 		System.out.println(a + "+" + b + "=" + result);
-		stack.push(result);
+		stack.push(result + "");
 		
 	}
 
 	private static void SUB() {
 		// pop the top two values off the stack, subtract them, and push the
 		// result
-		int a = stack.pop();
-		int b = stack.pop();
+		int a = Integer.parseInt(stack.pop());
+		int b = Integer.parseInt(stack.pop());
 		int result = a-b;
 		
 		System.out.println(a + "-" + b + "=" + result);
-		stack.push(result);
+		stack.push(result + "");
 	}
 
 	private static void MPY() {
 		// pop the top two values off the stack, multiply them, and push the
 		// result
-		int a = stack.pop();
-		int b = stack.pop();
+		int a = Integer.parseInt(stack.pop());
+		int b = Integer.parseInt(stack.pop());
 		int result = a*b;
 		
 		System.out.println(a + "*" + b + "=" + result);
-		stack.push(result);
+		stack.push(result + "");
 	}
 
 	private static void DIV() {
 		// pop the top two values off the stack, divide them, and push the
 		// result
-		int a = stack.pop();
-		int b = stack.pop();
+		int a = Integer.parseInt(stack.pop());
+		int b = Integer.parseInt(stack.pop());
 		int result = a/b;
 		
 		System.out.println(a + " DIV " + b + "=" + result);
-		stack.push(result);
+		stack.push(result + "");
 	}
 
 	private static void MOD() {
 		// pop the top two values off the stack, compute the modulus, and push
 		// the result
-		int a = stack.pop();
-		int b = stack.pop();
+		int a = Integer.parseInt(stack.pop());
+		int b = Integer.parseInt(stack.pop());
 		int result = a%b;
 		
 		System.out.println(a + " MOD " + b + "=" + result);
-		stack.push(result);
+		stack.push(result + "");
 	}
 
 	private static void POW() {
 		// pop the top two values off the stack, compute the exponentian
 		// operation, and push the result
 		
-		int a = stack.pop();
-		int b = stack.pop();
+		int a = Integer.parseInt(stack.pop());
+		int b = Integer.parseInt(stack.pop());
 		int result = a^b;
 		
 		System.out.println(a + "^" + b + "=" + result);
-		stack.push(result);
+		stack.push(result + "");
 	}
 
 	private static void HALT() {
