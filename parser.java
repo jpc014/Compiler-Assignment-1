@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 /*
 Example Grammar
@@ -24,33 +27,37 @@ public void type(){
 
 public class parser {
 	// Symbols
-	public static final String BEGINSym = "BEGIN";
-	public static final String ENDSym = "END";
-	public static final String EQUALSSym = ":=";
-	public static final String EPSILONSym = "";
-	public static final String SEMICOLONSym = ";";
-	public static final String ADDSym = "+";
-	public static final String SUBSym = "-";
-	public static final String MULSym = "*";
-	public static final String DIVSym = "DIV";
-	public static final String MODSym = "MOD";
-	public static final String POWERSym = "^";
-	public static final String POSym = "(";
-	public static final String PCSym = ")";
-	
-	//Holds current token
-	public static String currentToken= "";
+	private static final String BEGINSym = "BEGIN";
+	private static final String ENDSym = "END";
+	private static final String EQUALSSym = ":=";
+	private static final String EPSILONSym = "";
+	private static final String SEMICOLONSym = ";";
+	private static final String ADDSym = "+";
+	private static final String SUBSym = "-";
+	private static final String MULSym = "*";
+	private static final String DIVSym = "DIV";
+	private static final String MODSym = "MOD";
+	private static final String POWERSym = "^";
+	private static final String POSym = "(";
+	private static final String PCSym = ")";
 	
 	//Holds next token
-	public static String lookAhead= "";
+	private static String lookAhead= "";
+	
+	//private static StringTokenizer tokObj = new StringTokenizer();
 	
 	//initialize stack
-	public static Stack<Integer> stack = new Stack<Integer>();
+	private static Stack<Integer> stack = new Stack<Integer>();
+
+	private static List<Variable> memory = new ArrayList<Variable>();
 
 	public static void main(String args[]) {
 		System.out.println("Hello from main");
 		//lexical analyzer
-		//compiler_assignment arrList = new compiler_assignment();
+		int line = 0;
+		lexical_analizer arrList = new lexical_analizer();
+		
+		
 	}
 
 	/*
@@ -65,11 +72,11 @@ public class parser {
 	 */
 
 	
-	public static void Match(String t){
+	private static void Match(String t){//******************************************************************************
 		//compares Symbol with token stored in lookAhead, if they match advance lookAhead to next token
 		//else there is an error
 		if(lookAhead == t){
-			//LookAhead == nexttoken();
+			//lookAhead = nexttoken();
 		}	
 		else{
 			System.out.println("The token does not match, exiting...");
@@ -77,39 +84,42 @@ public class parser {
 		}
 	}
 	
-	public static void program(){
+	//start
+	private static void program(){
 		// check BEGIN symbol
 		
-		
 		// check END Symbol
-		
 		
 		// Proceed to parse stmt_List
 		stmt_List();
 	}
 	
-	public static void stmt(){
+	private static void stmt(){
 		// <id> := <expr>
-		if(lookAhead.equals(EQUALSSym)){
-			
-		}
+		id();
+		Match(EQUALSSym);
+		expr();
 		
 		// epsilon
 		
 	}
 	
-	public static void stmt_List(){
+	private static void stmt_List(){
 		// if <stmt_list> ; <stmt> ************ need to remove left recursion 
-		
+		if(){
+			
+		}
 		
 		// else if <stmt>
-		
+		else{
+			stmt();
+		}
 		
 		// else error
 		
 	}
 	
-	public static void expr(){
+	private static void expr(){
 		// <expr> + <term>
 		if(lookAhead.equals(ADDSym)){
 			expr();
@@ -133,7 +143,7 @@ public class parser {
 		
 	}
 	
-	public static void term(){
+	private static void term(){
 		// <term> * <factor>
 		if(lookAhead == MULSym){
 			term();
@@ -164,7 +174,7 @@ public class parser {
 		
 	}
 	
-	public static void factor(){
+	private static void factor(){
 		// <primary> ^ <factor>
 		if(lookAhead == POWERSym){
 			primary();
@@ -180,34 +190,53 @@ public class parser {
 		// error
 	}
 	
-	public static void primary(){
+	private static void primary(){
 		// reconize current token as an (<expr>)
-		if(currentToken[0].equals(POSym){
+		if(lookAhead.substring(0, 0) == POSym){
 			Match(POSym);
 			expr();
 			Match(PCSym);
 		}
 		
-		// reconize current token as an <id>
+		// reconize current token as an <id> (begins with a letter)
+		if(lookAhead.substring(0, 0) == "temp"){
+			id();
+		}
 		
-		
-		// reconize current token as an <num>
-		
+		// reconize current token as a <num>
+		else{
+			PUSH(Integer.parseInt(lookAhead));
+		}
 		
 		// error
+	}
+	
+	private static void id(){
+		//check if variable already exists in artificial memory array, if it does overwrite the value stores for that variable
+		//otherwise create new entry
 		
+		//check if variable already exists
+			
+		//if it does update vlaue
+		if(lookAhead == "derp"){
+			
+		}
+		//else create new object and add it to the memory arraylist
+		else{
+			memory.add(new Variable(lookAhead,0));
+		}				
 	}
 	
 	// Instructions
 
-	public static void PUSH(int s) {
-		// push v (an integer constant) on the stack
+	private static void PUSH(int s) {
+		// push s (an integer constant) on the stack
 		System.out.println("Hello from PUSH");
 		
 		stack.push(s);
 	}
 	
-	public static void POP() {
+	private static void POP() {
 		// throw away the top value on the stack
 		try {
 			System.out.println("Hello from POP");
@@ -220,23 +249,23 @@ public class parser {
 		}
 	}
 
-	public static void RVALUE() {
+	private static void RVALUE() {
 		// push the contents of variable l
 		System.out.println("Hello from RVALUE");
 	}
 
-	public static void LVALUE() {
+	private static void LVALUE() {
 		// push the address of the variable l
 		System.out.println("Hello from LVALUE");
 	}
 
-	public static void EQUALS() {
+	private static void EQUALS() {
 		// the rvalue on top of the stack is place in the lvalue below it and
 		// both are popped
 		System.out.println("Hello from EQUALS");
 	}
 
-	public static void COPY() {
+	private static void COPY() {
 		// push a copy of the top value on the stack
 		int s = stack.pop();
 		System.out.println("Copying " + s );
@@ -245,7 +274,7 @@ public class parser {
 		stack.push(s);
 	}
 
-	public static void ADD() {
+	private static void ADD() {
 		// pop the top two values off the stack, add them, and push the result
 		int a = stack.pop();
 		int b = stack.pop();
@@ -256,7 +285,7 @@ public class parser {
 		
 	}
 
-	public static void SUB() {
+	private static void SUB() {
 		// pop the top two values off the stack, subtract them, and push the
 		// result
 		int a = stack.pop();
@@ -267,7 +296,7 @@ public class parser {
 		stack.push(result);
 	}
 
-	public static void MPY() {
+	private static void MPY() {
 		// pop the top two values off the stack, multiply them, and push the
 		// result
 		int a = stack.pop();
@@ -278,7 +307,7 @@ public class parser {
 		stack.push(result);
 	}
 
-	public static void DIV() {
+	private static void DIV() {
 		// pop the top two values off the stack, divide them, and push the
 		// result
 		int a = stack.pop();
@@ -289,7 +318,7 @@ public class parser {
 		stack.push(result);
 	}
 
-	public static void MOD() {
+	private static void MOD() {
 		// pop the top two values off the stack, compute the modulus, and push
 		// the result
 		int a = stack.pop();
@@ -300,7 +329,7 @@ public class parser {
 		stack.push(result);
 	}
 
-	public static void POW() {
+	private static void POW() {
 		// pop the top two values off the stack, compute the exponentian
 		// operation, and push the result
 		
@@ -312,10 +341,36 @@ public class parser {
 		stack.push(result);
 	}
 
-	public static void HALT() {
+	private static void HALT() {
 		// stop execution
 		System.out.println("Exiting");
 		System.exit(0);
 	}
 
+}
+
+class Variable{
+	private String variable;
+	private int value;
+	
+	public Variable(String var, int val){
+		this.variable = var;
+		this.value = val;
+	}
+	
+	public void setVariable(String s){
+		this.variable = s;
+	}
+	
+	public String getVariable(){
+		return this.variable;
+	}
+
+	public void setValue(int v){
+		this.value = v;
+	}
+
+	public int getValue(){
+		return this.value;
+	}
 }
