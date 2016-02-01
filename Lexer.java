@@ -254,8 +254,14 @@ public class Lexer
 							curr = read();
 						}
 
+
 						else
 						{
+							if(alphaBuffer.equals("BEGIN"))
+								return new Token("Begin Statement", "BEGIN");
+							if(alphaBuffer.equals("END"))
+								return new Token("End Statement", "END");
+
 							return new Token("ID", "" + alphaBuffer);
 						}
 						continue;
