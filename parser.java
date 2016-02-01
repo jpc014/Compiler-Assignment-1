@@ -299,6 +299,8 @@ public class parser {
 		int index;
 		if(variable.substring(0,6).equalsIgnoreCase("memory ")){
 			index = Integer.parseInt(variable.substring(7));
+			Variable v = memory.get(index);
+			v.setValue(rvalue);
 		}
 		else{
 			System.out.println("An error has occured");
@@ -307,8 +309,7 @@ public class parser {
 		
 		
 		
-		Variable v = memory.get(index);
-		v.setValue(rvalue);
+		
 
 	}
 
