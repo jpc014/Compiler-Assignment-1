@@ -42,21 +42,22 @@ public class parser {
 	private static final String PCSym = ")";
 	
 	//Holds next token
-	private static String lookAhead= "";
-	
-	//private static StringTokenizer tokObj = new StringTokenizer();
+	private static String lookAhead;
 	
 	//initialize stack
 	private static Stack<Integer> stack = new Stack<Integer>();
 
 	private static List<Variable> memory = new ArrayList<Variable>();
-
+	
+	//create object for lexical class
+	private static lexical_analizer lex = new lexical_analizer();
+	
 	public static void main(String args[]) {
 		System.out.println("Hello from main");
 		//lexical analyzer
-		int line = 0;
-		lexical_analizer arrList = new lexical_analizer();
 		
+		lookAhead = lex.currentToken();
+		program();
 		
 	}
 
@@ -72,11 +73,12 @@ public class parser {
 	 */
 
 	
-	private static void Match(String t){//******************************************************************************
+	private static void Match(String t){
 		//compares Symbol with token stored in lookAhead, if they match advance lookAhead to next token
 		//else there is an error
 		if(lookAhead == t){
-			//lookAhead = nexttoken();
+			lex.nextToken();
+			lookAhead = lex.currentToken();
 		}	
 		else{
 			System.out.println("The token does not match, exiting...");
@@ -87,11 +89,13 @@ public class parser {
 	//start
 	private static void program(){
 		// check BEGIN symbol
-		
-		// check END Symbol
+		Match(BEGINSym);
 		
 		// Proceed to parse stmt_List
 		stmt_List();
+		
+		// check END Symbol
+		Match(ENDSym);
 	}
 	
 	private static void stmt(){
@@ -104,7 +108,7 @@ public class parser {
 		
 	}
 	
-	private static void stmt_List(){
+	private static void stmt_List(){//********************************************************************************
 		// if <stmt_list> ; <stmt> ************ need to remove left recursion 
 		if(){
 			
@@ -249,14 +253,27 @@ public class parser {
 		}
 	}
 
-	private static void RVALUE() {
+	private static void RVALUE(String var) {//***********************************************************************
 		// push the contents of variable l
 		System.out.println("Hello from RVALUE");
+		
+		//find var
+		Variable v;
+		for(int i=0; i < memory.size(); i++){
+			v = memory.get(i);
+			
+			if(v.getVariable() == var){
+				PUSH();
+			}
+			
+		}
 	}
 
-	private static void LVALUE() {
+	private static void LVALUE() {//********************************************************************************
 		// push the address of the variable l
 		System.out.println("Hello from LVALUE");
+		
+		
 	}
 
 	private static void EQUALS() {
