@@ -76,7 +76,7 @@ public class parser {
 	 * <stmt> -> <id> := <expr> | epsilon
 	 * <expr> -> <expr> + <term> |<expr> - <term> | <term>
 	 * <term> -> <term> * <factor> | <term> DIV <factor> | <term> MOD <factor> | <factor> 
-	 * <factor> -> <primary> ^<factor> | <primary> 
+	 * <factor> -> <primary> ^ <factor> | <primary> 
 	 * <primary> -> <id> | <num> | ( <expr> )
 	 */
 
@@ -296,7 +296,15 @@ public class parser {
 		
 		int rvalue = Integer.parseInt(stack.pop());
 		String variable = stack.pop();
-		int index = Integer.parseInt(variable.substring(7));
+		int index;
+		if(variable.substring(0,6).equalsIgnoreCase("memory ")){
+			index = Integer.parseInt(variable.substring(7));
+		}
+		else{
+			System.out.println("An error has occured");
+			HALT();
+		}
+		
 		
 		
 		Variable v = memory.get(index);
