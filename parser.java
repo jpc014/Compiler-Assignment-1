@@ -117,86 +117,91 @@ public class parser {
 	}
 	
 	private static void stmt_List(){//********************************************************************************
-		// if <stmt_list> ; <stmt> ************ need to remove left recursion 
-		if(){
-			
-		}
 		
-		// else if <stmt>
-		else{
-			stmt();
-		}
 		
-		// else error
+	}
+	
+	private static void stmt_List_r(){
 		
 	}
 	
 	private static void expr(){
+		term();
+		expr_r();
+	}
+	
+	private static void expr_r(){
 		// <expr> + <term>
 		if(lookAhead.equals(ADDSym)){
-			expr();
 			Match(ADDSym);
 			term();
+			expr_r();
 		}
-		
+				
 		// <expr> - <term>
 		else if(lookAhead == SUBSym){
-			expr();
 			Match(SUBSym);
 			term();
+			expr_r();
 		}
-		
-		// <term>
+				
 		else{
-			term();
+
 		}
-		
+				
 		// error
-		
 	}
 	
 	private static void term(){
-		// <term> * <factor>
-		if(lookAhead == MULSym){
-			term();
-			Match(MULSym);
-			factor();
-		}
-		
-		// <term> DIV <factor>
-		else if(lookAhead == DIVSym){
-			term();
-			Match(DIVSym);
-			factor();
-		}
-		
-		// <term> MOD <factor>
-		else if(lookAhead == MODSym){
-			term();
-			Match(MODSym);
-			factor();
-		}
-		
-		// <factor>
-		else{
-			factor();
-		}
-		
-		// error
+		factor();
+		term_r();
 		
 	}
 	
+	private static void term_r(){
+		// <term> * <factor>
+		if(lookAhead == MULSym){
+			Match(MULSym);
+			factor();
+			term_r();
+		}
+				
+		// <term> DIV <factor>
+		else if(lookAhead == DIVSym){
+			Match(DIVSym);
+			factor();
+			term_r();
+		}
+				
+		// <term> MOD <factor>
+		else if(lookAhead == MODSym){
+			Match(MODSym);
+			factor();
+			term_r();
+		}
+				
+		// <factor>
+		else{
+		}
+				
+		// error
+	}
+	
 	private static void factor(){
+		primary();
+		factor_r();
+	}
+	
+	private static void factor_r(){
 		// <primary> ^ <factor>
 		if(lookAhead == POWERSym){
-			primary();
 			Match(POWERSym);
-			factor();
+			primary();
+			factor_r();
 		}
 		
 		// <primary>
 		else {
-			primary();
 		}
 		
 		// error
