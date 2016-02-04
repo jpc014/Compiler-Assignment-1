@@ -96,10 +96,10 @@ public class parser {
 	}
 
 	private static void nextToken1(){
-		System.out.println("\nOld token: " + lookAhead);
+		//System.out.println("\nOld token: " + lookAhead);
 		lex.nextToken();
 		lookAhead = lex.currentToken();
-		System.out.println("New token:" + lookAhead + "\n");
+		//System.out.println("New token: " + lookAhead + "\n");
 	}
 
 	//start
@@ -112,6 +112,7 @@ public class parser {
 
 		// check END Symbol
 		Match(ENDSym);
+		System.out.println("Done, exiting...");
 	}
 
 	private static void stmt(){
@@ -119,6 +120,7 @@ public class parser {
 		id();
 		Match(EQUALSSym);
 		expr();
+		EQUALS();
 
 		// epsilon
 
@@ -151,6 +153,7 @@ public class parser {
 			Match(ADDSym);
 			term();
 			expr_r();
+			ADD();
 		}
 
 		// <expr> - <term>
@@ -231,7 +234,7 @@ public class parser {
 		}
 
 		// reconize current token as an <id> (begins with a letter)
-		if(lookAhead.substring(0, 0) == "temp"){
+		if(Lexer.isAlpha_r(lookAhead.charAt(0))){
 			id();
 		}
 
@@ -244,10 +247,10 @@ public class parser {
 	}
 
 	private static void id(){
-		System.out.println("Hello from id()");
 		//check if variable already exists in artificial memory array, if it does overwrite the value stores for that variable
 		//otherwise create new entry
 
+		/*
 		//check if variable already exists
 		Variable v;
 		for(int i =0; i<memory.size(); i++){
@@ -258,23 +261,26 @@ public class parser {
 
 				return;
 			}
-
 		}
-		// create new object and add it to the memory arraylist
-		memory.add(new Variable(lookAhead,0));
+		*/
+
+		//determine if valid id
+
+
+		LVALUE(lookAhead);
 
 		//advance to next token
-		nextToken1();
+
 	}
 
 	// Instructions
 
 	private static void PUSH(String s) {
 		// push s (an integer constant) on the stack
-		System.out.println("Hello from PUSH");
+		System.out.println("PUSH " + lookAhead);
 
 		stack.push(s + "");
-		nextToken1();
+		//nextToken1();
 	}
 
 	private static void POP() {
@@ -308,7 +314,7 @@ public class parser {
 
 	private static void LVALUE(String l) {
 		// push the address of the variable l
-		System.out.println("Hello from LVALUE");
+		System.out.println("LVALUE " + lookAhead);
 
 		Variable v;
 		for(int i=0; i < memory.size(); i++){
@@ -316,9 +322,17 @@ public class parser {
 
 			if(v.getVariable() == l){
 				PUSH("memory " + i);
+				nextToken1();
+				return;
 			}
-
 		}
+
+		//if it makes it to here then the variable doesn't have an entry in the m,emory array and so a new entry must be created
+		// create new object and add it to the memory arraylist
+		memory.add(new Variable(lookAhead,0));
+		PUSH("memory " + (memory.size()-1));
+
+		System.out.println(stack);
 		nextToken1();
 	}
 
@@ -327,10 +341,19 @@ public class parser {
 		System.out.println("Hello from EQUALS");
 
 		int rvalue = Integer.parseInt(stack.pop());
+
+
 		String variable = stack.pop();
+
+
 		int index;
 		if(variable.substring(0,6).equalsIgnoreCase("memory ")){
+			System.out.println(variable.substring(6,7c void));
+
 			index = Integer.parseInt(variable.substring(7));
+
+			System.out.println("index: " + index);
+
 			Variable v = memory.get(index);
 			v.setValue(rvalue);
 		}
@@ -360,7 +383,7 @@ public class parser {
 		int b = Integer.parseInt(stack.pop());
 		int result = a+b;
 
-		System.out.println(a + "+" + b + "=" + result);
+		System.out.println(b + "+" + a + "=" + result);
 		stack.push(result + "");
 
 		nextToken1();

@@ -54,6 +54,16 @@ public class Lexer
 		return false;
 	}
 
+	public static boolean isAlpha_r(char c)
+		{
+			if(c >= 'a' && c <= 'z')
+				return true;
+			if(c >= 'A' && c <= 'Z')
+				return true;
+
+			return false;
+	}
+
 	public Token nextToken()
 	{
 		int state = 1;

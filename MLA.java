@@ -61,6 +61,8 @@ public class MLA {
 
 	public static void nextToken()
 	{
-		counter++;
+		if(counter < list.size() - 1){
+			counter++;
+		}
 	}
 }
