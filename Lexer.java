@@ -44,7 +44,7 @@ public class Lexer
 		return false;
 	}
 
-	private static boolean isNumeric_r(char c) {
+	public static boolean isNumeric_r(char c) {
 			if (c >= '0' && c <= '9')
 				return true;
 
