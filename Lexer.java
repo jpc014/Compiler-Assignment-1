@@ -144,10 +144,10 @@ public class Lexer
 						case '^':
 							curr = read();
 							return new Token("Caret", "^");
-
+						
 						case '=':
 							curr = read();
-							return new Token("Equals", "=");
+							return new Token("Equals", ":=");
 
 						case ':':
 							curr = read();

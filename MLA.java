@@ -50,7 +50,7 @@ public class MLA {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println(currentToken());
+		System.out.println(list);
 
 	}
 

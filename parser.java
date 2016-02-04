@@ -90,6 +90,7 @@ public class parser {
 		}
 		else{
 			System.out.println(lookAhead);
+			System.out.println(t);
 			System.out.println("The token does not match, exiting...");
 			System.exit(0);
 		}
@@ -119,8 +120,9 @@ public class parser {
 		// <id> := <expr>
 		id();
 		Match(EQUALSSym);
+		
 		expr();
-		EQUALS();
+		System.out.println(":=");
 
 		// epsilon
 
@@ -149,11 +151,12 @@ public class parser {
 
 	private static void expr_r(){
 		// <expr> + <term>
-		if(lookAhead.equals(ADDSym)){
+		if(lookAhead == ADDSym){
 			Match(ADDSym);
 			term();
 			expr_r();
-			ADD();
+			//ADD();
+			System.out.println("ADD");
 		}
 
 		// <expr> - <term>
@@ -161,6 +164,7 @@ public class parser {
 			Match(SUBSym);
 			term();
 			expr_r();
+			System.out.println("SUB");
 		}
 
 		else{
@@ -182,6 +186,7 @@ public class parser {
 			Match(MULSym);
 			factor();
 			term_r();
+			System.out.println("MUL");
 		}
 
 		// <term> DIV <factor>
@@ -189,6 +194,7 @@ public class parser {
 			Match(DIVSym);
 			factor();
 			term_r();
+			System.out.println("MUL");
 		}
 
 		// <term> MOD <factor>
@@ -196,6 +202,7 @@ public class parser {
 			Match(MODSym);
 			factor();
 			term_r();
+			System.out.println("MOD");
 		}
 
 		// <factor>
@@ -216,6 +223,7 @@ public class parser {
 			Match(POWERSym);
 			primary();
 			factor_r();
+			System.out.println("POW");
 		}
 
 		// <primary>
@@ -270,6 +278,7 @@ public class parser {
 		LVALUE(lookAhead);
 
 		//advance to next token
+		//nextToken1();
 
 	}
 
@@ -280,7 +289,7 @@ public class parser {
 		System.out.println("PUSH " + lookAhead);
 
 		stack.push(s + "");
-		//nextToken1();
+		nextToken1();
 	}
 
 	private static void POP() {
@@ -321,7 +330,7 @@ public class parser {
 			v = memory.get(i);
 
 			if(v.getVariable() == l){
-				PUSH("memory " + i);
+				stack.push(("memory " + i));
 				nextToken1();
 				return;
 			}
@@ -330,9 +339,7 @@ public class parser {
 		//if it makes it to here then the variable doesn't have an entry in the m,emory array and so a new entry must be created
 		// create new object and add it to the memory arraylist
 		memory.add(new Variable(lookAhead,0));
-		PUSH("memory " + (memory.size()-1));
-
-		System.out.println(stack);
+		stack.push(("memory " + (memory.size()-1)));
 		nextToken1();
 	}
 
@@ -348,9 +355,9 @@ public class parser {
 
 		int index;
 		if(variable.substring(0,6).equalsIgnoreCase("memory ")){
-			System.out.println(variable.substring(6,7c void));
+			System.out.println(variable.substring(6,7));
 
-			index = Integer.parseInt(variable.substring(7));
+			index = Integer.parseInt(variable.toString().substring(7));
 
 			System.out.println("index: " + index);
 
