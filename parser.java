@@ -118,7 +118,7 @@ public class parser {
 
 	private static void stmt(){
 		// <id> := <expr>
-		id();
+		LVALUE(lookAhead);
 		Match(EQUALSSym);
 		
 		expr();
@@ -153,18 +153,22 @@ public class parser {
 		// <expr> + <term>
 		if(lookAhead == ADDSym){
 			Match(ADDSym);
+			
 			term();
+			System.out.println("ADD");
 			expr_r();
 			//ADD();
-			System.out.println("ADD");
+			
 		}
 
 		// <expr> - <term>
 		else if(lookAhead == SUBSym){
 			Match(SUBSym);
+			
 			term();
-			expr_r();
 			System.out.println("SUB");
+			expr_r();
+			
 		}
 
 		else{
@@ -184,25 +188,30 @@ public class parser {
 		// <term> * <factor>
 		if(lookAhead == MULSym){
 			Match(MULSym);
+			
 			factor();
-			term_r();
 			System.out.println("MUL");
+			term_r();
+			
 		}
 
 		// <term> DIV <factor>
 		else if(lookAhead == DIVSym){
 			Match(DIVSym);
+			
 			factor();
+			System.out.println("DIV");
 			term_r();
-			System.out.println("MUL");
+			
 		}
 
 		// <term> MOD <factor>
 		else if(lookAhead == MODSym){
 			Match(MODSym);
 			factor();
-			term_r();
 			System.out.println("MOD");
+			term_r();
+			
 		}
 
 		// <factor>
@@ -221,9 +230,11 @@ public class parser {
 		// <primary> ^ <factor>
 		if(lookAhead == POWERSym){
 			Match(POWERSym);
+			
 			primary();
-			factor_r();
 			System.out.println("POW");
+			factor_r();
+			
 		}
 
 		// <primary>
@@ -275,7 +286,7 @@ public class parser {
 		//determine if valid id
 
 
-		LVALUE(lookAhead);
+		RVALUE(lookAhead);
 
 		//advance to next token
 		//nextToken1();
@@ -307,8 +318,9 @@ public class parser {
 
 	private static void RVALUE(String var) {
 		// push the contents of variable l
-		System.out.println("Hello from RVALUE");
-
+		System.out.println("RVALUE " + var);
+		
+		/*
 		//find var
 		Variable v;
 		for(int i=0; i < memory.size(); i++){
@@ -318,6 +330,8 @@ public class parser {
 				PUSH(v.getValue() + "");
 			}
 		}
+		
+		*/
 		nextToken1();
 	}
 
