@@ -50,7 +50,7 @@ public class MLA {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println(currentToken());
+		System.out.println(list);
 
 	}
 
@@ -61,6 +61,8 @@ public class MLA {
 
 	public static void nextToken()
 	{
-		counter++;
+		if(counter < list.size() - 1){
+			counter++;
+		}
 	}
 }
