@@ -86,13 +86,20 @@ public class parser {
 		//compares Symbol with token stored in lookAhead, if they match advance lookAhead to next token
 		//else there is an error
 		if(lookAhead == t){
-			lex.nextToken();
-			lookAhead = lex.currentToken();
+			nextToken1();
 		}
 		else{
+			System.out.println(lookAhead);
 			System.out.println("The token does not match, exiting...");
 			System.exit(0);
 		}
+	}
+
+	private static void nextToken1(){
+		System.out.println("\nOld token: " + lookAhead);
+		lex.nextToken();
+		lookAhead = lex.currentToken();
+		System.out.println("New token:" + lookAhead + "\n");
 	}
 
 	//start
@@ -117,7 +124,7 @@ public class parser {
 
 	}
 
-	private static void stmt_List(){//********************************************************************************
+	private static void stmt_List(){
 		stmt();
 		stmt_List_r();
 	}
@@ -237,19 +244,27 @@ public class parser {
 	}
 
 	private static void id(){
+		System.out.println("Hello from id()");
 		//check if variable already exists in artificial memory array, if it does overwrite the value stores for that variable
 		//otherwise create new entry
 
 		//check if variable already exists
+		Variable v;
+		for(int i =0; i<memory.size(); i++){
+			v=memory.get(i);
 
-		//if it does update vlaue
-		if(lookAhead == "derp"){
+			//if it does update value
+			if( lookAhead == v.getVariable() ){
+
+				return;
+			}
 
 		}
-		//else create new object and add it to the memory arraylist
-		else{
-			memory.add(new Variable(lookAhead,0));
-		}
+		// create new object and add it to the memory arraylist
+		memory.add(new Variable(lookAhead,0));
+
+		//advance to next token
+		nextToken1();
 	}
 
 	// Instructions
@@ -259,6 +274,7 @@ public class parser {
 		System.out.println("Hello from PUSH");
 
 		stack.push(s + "");
+		nextToken1();
 	}
 
 	private static void POP() {
@@ -271,9 +287,10 @@ public class parser {
 			System.out.println("POP failed, Stack is empty");
 			HALT();
 		}
+		nextToken1();
 	}
 
-	private static void RVALUE(String var) {//***********************************************************************
+	private static void RVALUE(String var) {
 		// push the contents of variable l
 		System.out.println("Hello from RVALUE");
 
@@ -286,9 +303,10 @@ public class parser {
 				PUSH(v.getValue() + "");
 			}
 		}
+		nextToken1();
 	}
 
-	private static void LVALUE(String l) {//********************************************************************************
+	private static void LVALUE(String l) {
 		// push the address of the variable l
 		System.out.println("Hello from LVALUE");
 
@@ -301,9 +319,10 @@ public class parser {
 			}
 
 		}
+		nextToken1();
 	}
 
-	private static void EQUALS() {//***********************************************************************************
+	private static void EQUALS() {
 		// the rvalue on top of the stack is placed in the lvalue below it and both are popped
 		System.out.println("Hello from EQUALS");
 
@@ -320,6 +339,8 @@ public class parser {
 			HALT();
 		}
 
+		nextToken1();
+
 	}
 
 	private static void COPY() {
@@ -329,6 +350,8 @@ public class parser {
 
 		stack.push(s + "");
 		stack.push(s + "");
+
+		nextToken1();
 	}
 
 	private static void ADD() {
@@ -340,6 +363,7 @@ public class parser {
 		System.out.println(a + "+" + b + "=" + result);
 		stack.push(result + "");
 
+		nextToken1();
 	}
 
 	private static void SUB() {
@@ -351,6 +375,8 @@ public class parser {
 
 		System.out.println(a + "-" + b + "=" + result);
 		stack.push(result + "");
+
+		nextToken1();
 	}
 
 	private static void MPY() {
@@ -362,6 +388,8 @@ public class parser {
 
 		System.out.println(a + "*" + b + "=" + result);
 		stack.push(result + "");
+
+		nextToken1();
 	}
 
 	private static void DIV() {
@@ -373,6 +401,8 @@ public class parser {
 
 		System.out.println(a + " DIV " + b + "=" + result);
 		stack.push(result + "");
+
+		nextToken1();
 	}
 
 	private static void MOD() {
@@ -384,6 +414,8 @@ public class parser {
 
 		System.out.println(a + " MOD " + b + "=" + result);
 		stack.push(result + "");
+
+		nextToken1();
 	}
 
 	private static void POW() {
@@ -396,6 +428,8 @@ public class parser {
 
 		System.out.println(a + "^" + b + "=" + result);
 		stack.push(result + "");
+
+		nextToken1();
 	}
 
 	private static void HALT() {
