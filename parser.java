@@ -9,7 +9,6 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.StringTokenizer;
 
 /*
 Example Grammar
@@ -58,8 +57,7 @@ public class parser {
 	private static List<Variable> memory = new ArrayList<Variable>();
 	
 	//create object for lexical class
-	private static lexical_analizer lex = new lexical_analizer();
-	
+	private static MLA lex = new MLA();
 	public static void main(String args[]) {
 		System.out.println("Hello from main");
 		//lexical analyzer
@@ -117,12 +115,19 @@ public class parser {
 	}
 	
 	private static void stmt_List(){//********************************************************************************
-		
-		
+		stmt();
+		stmt_List_r();
 	}
 	
 	private static void stmt_List_r(){
+		if(lookAhead == SEMICOLONSym){
+			stmt();
+			stmt_List_r();
+		}
 		
+		else{
+			
+		}
 	}
 	
 	private static void expr(){
@@ -311,10 +316,6 @@ public class parser {
 			System.out.println("An error has occured");
 			HALT();
 		}
-		
-		
-		
-		
 
 	}
 
