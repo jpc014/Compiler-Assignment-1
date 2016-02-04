@@ -18,7 +18,8 @@ $RECYCLE.BIN/
 *.lnk
 
 *.class
-
+*.BAT
+*.OUT
 # =========================
 # Operating System Files
 # =========================
