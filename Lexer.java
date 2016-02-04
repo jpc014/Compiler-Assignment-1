@@ -109,6 +109,10 @@ public class Lexer
 							curr = read();
 							return new Token("Plus Operator", "+");
 
+						case ';':
+													curr = read();
+							return new Token("Plus Operator", ";");
+
 						case '-':
 							curr = read();
 							return new Token("Minus Operator", "-");
@@ -144,7 +148,7 @@ public class Lexer
 						case '^':
 							curr = read();
 							return new Token("Caret", "^");
-						
+
 						case '=':
 							curr = read();
 							return new Token("Equals", ":=");
