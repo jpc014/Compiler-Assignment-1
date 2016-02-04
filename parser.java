@@ -1,11 +1,3 @@
-/*
- * TODO
- * convert list "stack" to string stack
- *
- * if variable gets pushed, push in format "memory index"
- * memory indicates that it is a variable, and index is the index where that variable is found
- */
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -89,8 +81,8 @@ public class parser {
 			nextToken1();
 		}
 		else{
-			System.out.println(lookAhead);
-			System.out.println(t);
+			System.out.println("lookAhead " + lookAhead);
+			System.out.println("match to  " + t);
 			System.out.println("The token does not match, exiting...");
 			System.exit(0);
 		}
@@ -120,7 +112,7 @@ public class parser {
 		// <id> := <expr>
 		LVALUE(lookAhead);
 		Match(EQUALSSym);
-		
+
 		expr();
 		System.out.println(":=");
 
@@ -135,6 +127,7 @@ public class parser {
 
 	private static void stmt_List_r(){
 		if(lookAhead == SEMICOLONSym){
+			Match(SEMICOLONSym);
 			stmt();
 			stmt_List_r();
 		}
@@ -153,22 +146,22 @@ public class parser {
 		// <expr> + <term>
 		if(lookAhead == ADDSym){
 			Match(ADDSym);
-			
+
 			term();
 			System.out.println("ADD");
 			expr_r();
 			//ADD();
-			
+
 		}
 
 		// <expr> - <term>
 		else if(lookAhead == SUBSym){
 			Match(SUBSym);
-			
+
 			term();
 			System.out.println("SUB");
 			expr_r();
-			
+
 		}
 
 		else{
@@ -188,21 +181,21 @@ public class parser {
 		// <term> * <factor>
 		if(lookAhead == MULSym){
 			Match(MULSym);
-			
+
 			factor();
 			System.out.println("MUL");
 			term_r();
-			
+
 		}
 
 		// <term> DIV <factor>
 		else if(lookAhead == DIVSym){
 			Match(DIVSym);
-			
+
 			factor();
 			System.out.println("DIV");
 			term_r();
-			
+
 		}
 
 		// <term> MOD <factor>
@@ -211,7 +204,7 @@ public class parser {
 			factor();
 			System.out.println("MOD");
 			term_r();
-			
+
 		}
 
 		// <factor>
@@ -230,11 +223,11 @@ public class parser {
 		// <primary> ^ <factor>
 		if(lookAhead == POWERSym){
 			Match(POWERSym);
-			
+
 			primary();
 			System.out.println("POW");
 			factor_r();
-			
+
 		}
 
 		// <primary>
@@ -246,7 +239,7 @@ public class parser {
 
 	private static void primary(){
 		// reconize current token as an (<expr>)
-		if(lookAhead.substring(0, 0) == POSym){
+		if(lookAhead.charAt(0) == POSym.charAt(0)){
 			Match(POSym);
 			expr();
 			Match(PCSym);
@@ -258,7 +251,7 @@ public class parser {
 		}
 
 		// reconize current token as a <num>
-		else{
+		else if(Lexer.isNumeric_r(lookAhead.charAt(0))){
 			PUSH(lookAhead);
 		}
 
@@ -266,30 +259,30 @@ public class parser {
 	}
 
 	private static void id(){
-		//check if variable already exists in artificial memory array, if it does overwrite the value stores for that variable
-		//otherwise create new entry
+			//check if variable already exists in artificial memory array, if it does overwrite the value stores for that variable
+			//otherwise create new entry
 
-		/*
-		//check if variable already exists
-		Variable v;
-		for(int i =0; i<memory.size(); i++){
-			v=memory.get(i);
+			/*
+			//check if variable already exists
+			Variable v;
+			for(int i =0; i<memory.size(); i++){
+				v=memory.get(i);
 
-			//if it does update value
-			if( lookAhead == v.getVariable() ){
+				//if it does update value
+				if( lookAhead == v.getVariable() ){
 
-				return;
+					return;
+				}
 			}
-		}
-		*/
+			*/
 
-		//determine if valid id
+			//determine if valid id
 
 
-		RVALUE(lookAhead);
+			RVALUE(lookAhead);
 
-		//advance to next token
-		//nextToken1();
+			//advance to next token
+			//nextToken1();
 
 	}
 
@@ -319,7 +312,7 @@ public class parser {
 	private static void RVALUE(String var) {
 		// push the contents of variable l
 		System.out.println("RVALUE " + var);
-		
+
 		/*
 		//find var
 		Variable v;
@@ -330,7 +323,7 @@ public class parser {
 				PUSH(v.getValue() + "");
 			}
 		}
-		
+
 		*/
 		nextToken1();
 	}
